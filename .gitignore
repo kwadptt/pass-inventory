@@ -16,3 +16,6 @@ db.sqlite3
 
 # Leftover delivery archive (already extracted into starter/ and docs/)
 files.zip
+
+.vercel
+.env*
