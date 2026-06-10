@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PASS Inventory{% endblock %}</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Tahoma", sans-serif;
+            margin: 0;
+            background: #f5f6f8;
+            color: #222;
+        }
+        header {
+            background: #0b3d2e;
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        header .user-info {
+            font-size: 0.9em;
+        }
+        main {
+            padding: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+            font-size: 0.92em;
+        }
+        th {
+            background: #e8eef0;
+        }
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .filters {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .filters select, .filters button {
+            padding: 6px 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            background: #e0e0e0;
+        }
+        .badge-in_use { background: #d4edda; color: #155724; }
+        .badge-new_delivery { background: #cce5ff; color: #004085; }
+        .badge-retired { background: #f8d7da; color: #721c24; }
+        .badge-borrowed_in { background: #fff3cd; color: #856404; }
+        .badge-loaned_out { background: #fff3cd; color: #856404; }
+        .badge-correction { background: #e2e3e5; color: #383d41; }
+        a.device-link {
+            color: #0b3d2e;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        a.device-link:hover {
+            text-decoration: underline;
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-form button {
+            background: none;
+            border: none;
+            color: #fff;
+            text-decoration: underline;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="{% url 'inventory:device_list' %}">PASS Inventory</a>
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            {{ user.username }} |
+            <form class="logout-form" method="post" action="{% url 'admin:logout' %}">
+                {% csrf_token %}
+                <button type="submit">ออกจากระบบ</button>
+            </form>
+        {% endif %}
+    </div>
+</header>
+<main>
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

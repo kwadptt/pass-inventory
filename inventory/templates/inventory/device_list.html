@@ -1,0 +1,69 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}รายการอุปกรณ์ — PASS Inventory{% endblock %}
+
+{% block content %}
+<h1>รายการอุปกรณ์ (Tablet)</h1>
+
+<form class="filters" method="get">
+    <label for="plant">Plant ปัจจุบัน:</label>
+    <select name="plant" id="plant">
+        <option value="">— ทั้งหมด —</option>
+        {% for plant in plants %}
+            <option value="{{ plant.code }}" {% if plant.code == selected_plant %}selected{% endif %}>
+                {{ plant.code }} — {{ plant.name_th }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="status">สถานะ:</label>
+    <select name="status" id="status">
+        <option value="">— ทั้งหมด —</option>
+        {% for value, label in statuses %}
+            <option value="{{ value }}" {% if value == selected_status %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">กรอง</button>
+    <a href="{% url 'inventory:device_list' %}">ล้างตัวกรอง</a>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>S/N</th>
+            <th>ชนิด</th>
+            <th>Plant เจ้าของ</th>
+            <th>Plant ปัจจุบัน</th>
+            <th>สถานะล่าสุด</th>
+            <th>วันหมดประกัน</th>
+            <th>PM โดย</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td><a class="device-link" href="{% url 'inventory:device_detail' row.device.pk %}">{{ row.device.serial_number }}</a></td>
+            <td>{{ row.device.asset_type.name }}</td>
+            <td>{% if row.device.home_plant %}{{ row.device.home_plant.code }}{% else %}—{% endif %}</td>
+            <td>{% if row.current_plant %}{{ row.current_plant.code }}{% else %}—{% endif %}</td>
+            <td>
+                {% if row.current_status %}
+                    <span class="badge badge-{{ row.current_status }}">{{ row.current_status_label }}</span>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td>{% if row.warranty_end %}{{ row.warranty_end|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+            <td>{{ row.pm_responsibility_label }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">ไม่พบข้อมูล</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>ทั้งหมด {{ rows|length }} เครื่อง</p>
+{% endblock %}

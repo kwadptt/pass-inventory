@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Django
+db.sqlite3
+*.log
+
+# Env / secrets
+.env
+.env.*
+
+# Editor
+.vscode/
+
+# Leftover delivery archive (already extracted into starter/ and docs/)
+files.zip

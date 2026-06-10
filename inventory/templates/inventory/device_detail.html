@@ -1,0 +1,82 @@
+{% extends "inventory/base.html" %}
+
+{% block title %}{{ device.serial_number }} — PASS Inventory{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'inventory:device_list' %}">&laquo; กลับไปรายการอุปกรณ์</a></p>
+
+<h1>{{ device.serial_number }}</h1>
+
+<table style="max-width: 600px; margin-bottom: 24px;">
+    <tr>
+        <th>ชนิด</th>
+        <td>{{ device.asset_type.name }}</td>
+    </tr>
+    <tr>
+        <th>Plant เจ้าของ (home plant)</th>
+        <td>{% if device.home_plant %}{{ device.home_plant.code }} — {{ device.home_plant.name_th }}{% else %}—{% endif %}</td>
+    </tr>
+    <tr>
+        <th>Plant ปัจจุบัน</th>
+        <td>{% if current_plant %}{{ current_plant.code }} — {{ current_plant.name_th }}{% else %}—{% endif %}</td>
+    </tr>
+    <tr>
+        <th>รับเครื่องรอบ</th>
+        <td>{% if device.received_round %}{{ device.received_round }}{% else %}— (legacy){% endif %}</td>
+    </tr>
+    <tr>
+        <th>วันหมดประกัน</th>
+        <td>{% if warranty_end %}{{ warranty_end|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+    </tr>
+    <tr>
+        <th>PM โดย</th>
+        <td>{{ pm_responsibility_label }}</td>
+    </tr>
+    <tr>
+        <th>สถานะเครื่อง</th>
+        <td>{% if device.is_retired %}เสื่อมสภาพ/คืน Enco ({{ device.retired_round }}){% else %}ใช้งานอยู่{% endif %}</td>
+    </tr>
+    {% if device.replaced_predecessor %}
+    <tr>
+        <th>แทนที่เครื่อง</th>
+        <td><a class="device-link" href="{% url 'inventory:device_detail' device.replaced_predecessor.pk %}">{{ device.replaced_predecessor.serial_number }}</a></td>
+    </tr>
+    {% endif %}
+    {% if device.replaced_by %}
+    <tr>
+        <th>ถูกแทนที่ด้วยเครื่อง</th>
+        <td><a class="device-link" href="{% url 'inventory:device_detail' device.replaced_by.pk %}">{{ device.replaced_by.serial_number }}</a></td>
+    </tr>
+    {% endif %}
+    {% if device.notes %}
+    <tr>
+        <th>หมายเหตุ</th>
+        <td>{{ device.notes }}</td>
+    </tr>
+    {% endif %}
+</table>
+
+<h2>ประวัติ PM</h2>
+<table>
+    <thead>
+        <tr>
+            <th>รอบ</th>
+            <th>Plant</th>
+            <th>สถานะ</th>
+            <th>หมายเหตุ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in snapshots %}
+        <tr>
+            <td>{{ row.snapshot.pm_round }}</td>
+            <td>{{ row.snapshot.plant.code }}</td>
+            <td><span class="badge badge-{{ row.snapshot.status }}">{{ row.status_label }}</span></td>
+            <td>{{ row.snapshot.note|default:"—" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">ไม่มีประวัติ PM</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
