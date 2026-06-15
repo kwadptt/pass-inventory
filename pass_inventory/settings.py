@@ -38,8 +38,14 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = [h for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if h]
 if os.environ.get("VERCEL_URL"):
     ALLOWED_HOSTS.append(os.environ["VERCEL_URL"])
+# ครอบ stable aliases ทุก *.vercel.app (pass-inventory.vercel.app, pass-inventory-kwadptt-s-projects.vercel.app)
+if os.environ.get("VERCEL"):
+    ALLOWED_HOSTS.append(".vercel.app")
 
 CSRF_TRUSTED_ORIGINS = [f"https://{h}" for h in ALLOWED_HOSTS if h]
+# ครอบ wildcard domain ใน CSRF ด้วย
+if os.environ.get("VERCEL"):
+    CSRF_TRUSTED_ORIGINS.append("https://*.vercel.app")
 
 
 # Application definition

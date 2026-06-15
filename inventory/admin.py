@@ -47,7 +47,7 @@ class DeviceAdmin(admin.ModelAdmin):
     list_display = (
         "serial_number", "asset_type", "home_plant",
         "current_plant_display", "warranty_end_display",
-        "pm_responsibility_display", "is_retired",
+        "pm_responsibility_display", "is_active_display",
     )
     list_filter = ("asset_type", "home_plant", "is_retired")
     search_fields = ("serial_number", "notes")
@@ -80,6 +80,10 @@ class DeviceAdmin(admin.ModelAdmin):
     )
 
     # ─── Derived field display methods ─────────────────────────────────────
+    @admin.display(description="In Service", boolean=True)
+    def is_active_display(self, obj):
+        return not obj.is_retired
+
     @admin.display(description="Plant ปัจจุบัน")
     def current_plant_display(self, obj):
         return obj.current_plant or "—"
