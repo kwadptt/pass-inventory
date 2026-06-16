@@ -51,7 +51,7 @@ class DeviceAdmin(admin.ModelAdmin):
     )
     list_filter = ("asset_type", "home_plant", "is_retired")
     search_fields = ("serial_number", "notes")
-    raw_id_fields = ("replaced_predecessor",)
+    autocomplete_fields = ("replaced_predecessor",)
     readonly_fields = (
         "warranty_start_display", "warranty_end_display",
         "pm_responsibility_display", "current_plant_display",

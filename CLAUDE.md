@@ -66,7 +66,7 @@ Phase A/B/C เสร็จหมดแล้ว (ดูตาราง Current 
 
 ## Open TODOs
 
-- [ ] **Plant codes** — ตอนนี้ใน fixture/spec ใช้ placeholder (PKT, HDY, KBV, URT, UTP, UDT, CNX) เปลี่ยนเป็น code จริงของ OR เมื่อทราบ
+- [x] **Plant codes** — ใช้ PKT, HDY, KBV, URT, UTP, UDT, CNX ถูกต้องแล้ว ไม่ต้องเปลี่ยน
 - [ ] **Chain borrow** ในข้อมูลเก่า (ภูเก็ตยืมจากกระบี่ ซึ่งกระบี่ก็ยืมมาจากที่อื่น) — schema รองรับ แต่ตอน map ข้อมูลต้องระวัง
 
 ## Resolved
